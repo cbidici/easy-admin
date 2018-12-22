@@ -26,6 +26,11 @@ public class EntityBOBuilder {
 		return this;
 	}
 	
+	public EntityBOBuilder cls(Class cls) {
+		this.entity.setCls(cls);
+		return this;
+	}
+	
 	public EntityBOBuilder attributes(Set<AttributeBO> attributes) {
 		this.entity.setAttributes(attributes);
 		return this;

@@ -39,7 +39,7 @@ public class InitializerComponent {
 						.add(new AttributeBOBuilder().type(attribute.getJavaType()).name(attribute.getName()).build());
 			}
 			stateComponent
-					.addEntity(builder.type(type.getJavaType()).name(type.getName()).attributes(attributeBOs).build());
+					.addEntity(builder.type(type.getJavaType()).name(type.getName()).attributes(attributeBOs).cls(type.getJavaType()).build());
 		}
 	}
 
