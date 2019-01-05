@@ -41,13 +41,6 @@ public class EntityServiceImpl implements EntityService {
 		SessionImpl session = (SessionImpl)entityManager.getDelegate();
 		//Transaction tx = (Transaction) session.beginTransaction();
 		Query query = session.createQuery("from "+name);
-//		try {
-//			tx.commit();
-//		} catch (SecurityException | IllegalStateException | RollbackException | HeuristicMixedException
-//				| HeuristicRollbackException | SystemException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
 		List list = query.list();
 		session.close();
 		return list;
