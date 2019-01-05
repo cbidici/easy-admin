@@ -1,2 +1,2 @@
-# cb-admin
+# easy-admin
 Administrator library for persistent entities.
