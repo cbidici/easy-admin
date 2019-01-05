@@ -8,6 +8,8 @@ public class EntityBO {
 	private String name;
 
 	private Type type;
+	
+	private Class cls;
 
 	private Set<AttributeBO> attributes;
 
@@ -25,6 +27,14 @@ public class EntityBO {
 
 	public void setType(Type type) {
 		this.type = type;
+	}
+
+	public Class getCls() {
+		return cls;
+	}
+
+	public void setCls(Class cls) {
+		this.cls = cls;
 	}
 
 	public Set<AttributeBO> getAttributes() {
