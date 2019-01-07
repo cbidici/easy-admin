@@ -1,16 +1,11 @@
 package com.cb.admin.web.service.impl;
 
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.RollbackException;
-import javax.transaction.SystemException;
-import javax.transaction.Transaction;
 
 import org.hibernate.internal.SessionImpl;
 import org.hibernate.query.Query;
@@ -31,7 +26,7 @@ public class EntityServiceImpl implements EntityService {
 	EntityManagerFactory emf;
 	
 	@Override
-	public Set<EntityBO> getEntities(){
+	public Map<String, EntityBO> getEntities(){
 		return state.getEntities();
 	}
 	
