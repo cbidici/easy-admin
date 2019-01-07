@@ -3,6 +3,7 @@ package com.cb.admin.builder;
 import java.lang.reflect.Type;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import com.cb.admin.bo.AttributeBO;
 import com.cb.admin.bo.EntityBO;
@@ -26,7 +27,12 @@ public class EntityBOBuilder {
 		return this;
 	}
 	
-	public EntityBOBuilder cls(Class cls) {
+	public EntityBOBuilder category(String category) {
+		this.entity.setCategory(category);
+		return this;
+	}
+	
+	public EntityBOBuilder cls(Class<?> cls) {
 		this.entity.setCls(cls);
 		return this;
 	}
@@ -37,6 +43,7 @@ public class EntityBOBuilder {
 	}
 	
 	public EntityBO build() {
+		this.entity.setKey(UUID.randomUUID().toString());
 		return this.entity;
 	}
 }
