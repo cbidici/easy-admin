@@ -1,6 +1,7 @@
 package com.cb.admin.builder;
 
 import java.lang.reflect.Type;
+import java.util.UUID;
 
 import com.cb.admin.bo.AttributeBO;
 
@@ -12,8 +13,8 @@ public class AttributeBOBuilder {
 		this.attribute = new AttributeBO();
 	}
 	
-	public AttributeBOBuilder type(Type type) {
-		this.attribute.setType(type);
+	public AttributeBOBuilder identifier(String identifier) {
+		this.attribute.setIdentifier(identifier);
 		return this;
 	}
 	
@@ -22,7 +23,13 @@ public class AttributeBOBuilder {
 		return this;
 	}
 	
+	public AttributeBOBuilder type(Type type) {
+		this.attribute.setType(type);
+		return this;
+	}
+	
 	public AttributeBO build() {
+		this.attribute.setKey(UUID.randomUUID().toString());
 		return this.attribute;
 	}
 }

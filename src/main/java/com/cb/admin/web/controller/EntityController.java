@@ -1,8 +1,7 @@
 package com.cb.admin.web.controller;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -28,15 +27,20 @@ public class EntityController {
 	private ModelMapper modelMapper;
 
 	@GetMapping("entities")
-	public ResponseEntity<?> main() {
+	public ResponseEntity<?> entities() {
 		List<EntityDTO> resultList = entityService.getEntities().values().stream()
 				.map(x -> modelMapper.map(x, EntityDTO.class)).collect(Collectors.toList());
 		return new ResponseEntity<List<?>>(resultList, HttpStatus.OK);
 	}
+	
+	@GetMapping("entities/{key}/attributes")
+	public ResponseEntity<?> entityAttributes(@PathVariable String key) {
+		return new ResponseEntity<Set<?>>(entityService.getEntity(key).getAttributes(), HttpStatus.OK);
+	}
 
-	@GetMapping("entities/{entity}")
-	public ResponseEntity<?> getEntity(@PathVariable String entity) {
-		return new ResponseEntity<List<?>>(entityService.queryEntities(entity), HttpStatus.OK);
+	@GetMapping("entities/{key}/data")
+	public ResponseEntity<?> getEntity(@PathVariable String key) {
+		return new ResponseEntity<List<?>>(entityService.queryEntities(key), HttpStatus.OK);
 	}
 
 }

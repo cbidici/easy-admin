@@ -36,7 +36,7 @@ public class InitializerComponent {
 			Set<AttributeBO> attributeBOs = new HashSet<>();
 			for (Attribute<?, ?> attribute : attributes) {
 				attributeBOs
-						.add(new AttributeBOBuilder().type(attribute.getJavaType()).name(attribute.getName()).build());
+						.add(new AttributeBOBuilder().type(attribute.getJavaType()).identifier(attribute.getName()).name(attribute.getName()).build());
 			}
 
 			stateComponent.addEntity(builder.type(type.getJavaType()).name(type.getName())

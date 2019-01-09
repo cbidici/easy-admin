@@ -31,11 +31,18 @@ public class EntityServiceImpl implements EntityService {
 	}
 	
 	@Override
-	public List<?> queryEntities(String name) {
+	public EntityBO getEntity(String key){
+		return state.getEntities().get(key);
+	}
+	
+	@Override
+	public List<?> queryEntities(String key) {
+		EntityBO entity = this.getEntity(key);
+		
 		EntityManager entityManager = emf.createEntityManager();
 		SessionImpl session = (SessionImpl)entityManager.getDelegate();
 		//Transaction tx = (Transaction) session.beginTransaction();
-		Query query = session.createQuery("from "+name);
+		Query query = session.createQuery("from "+entity.getName());
 		List list = query.list();
 		session.close();
 		return list;
