@@ -7,8 +7,10 @@ import com.cb.admin.bo.EntityBO;
 
 public interface EntityService {
 
-	public Map<String, EntityBO> getEntities();
+	Map<String, EntityBO> getEntities();
 
-	public List<?> queryEntities(String name);
+	List<?> queryEntities(String key);
+
+	EntityBO getEntity(String key);
 
 }

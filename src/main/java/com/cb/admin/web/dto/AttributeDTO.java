@@ -1,12 +1,9 @@
-package com.cb.admin.bo;
+package com.cb.admin.web.dto;
 
 import java.lang.reflect.Type;
 
-public class AttributeBO {
-
+public class AttributeDTO {
 	private String key;
-	
-	private String identifier;
 	
 	private String name;
 
@@ -18,14 +15,6 @@ public class AttributeBO {
 
 	public void setKey(String key) {
 		this.key = key;
-	}
-
-	public String getIdentifier() {
-		return identifier;
-	}
-
-	public void setIdentifier(String identifier) {
-		this.identifier = identifier;
 	}
 
 	public String getName() {
