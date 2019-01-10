@@ -4,7 +4,11 @@ import java.lang.reflect.Type;
 
 public class AttributeDTO {
 	private String key;
-	
+  
+	private boolean identifier;
+
+	private String field;
+
 	private String name;
 
 	private Type type;
@@ -15,6 +19,22 @@ public class AttributeDTO {
 
 	public void setKey(String key) {
 		this.key = key;
+	}
+
+	public boolean isIdentifier() {
+		return identifier;
+	}
+
+	public void setIdentifier(boolean identifier) {
+		this.identifier = identifier;
+	}
+
+	public String getField() {
+		return field;
+	}
+
+	public void setField(String field) {
+		this.field = field;
 	}
 
 	public String getName() {

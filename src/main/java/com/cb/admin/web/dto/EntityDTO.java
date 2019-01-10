@@ -4,6 +4,8 @@ public class EntityDTO {
 	
 	private String key;
 	
+	private String identifier;
+	
 	private String name;
 	
 	private String category;
@@ -16,6 +18,14 @@ public class EntityDTO {
 		this.key = key;
 	}
 
+	public String getIdentifier() {
+		return identifier;
+	}
+
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
+	}
+	
 	public String getName() {
 		return name;
 	}

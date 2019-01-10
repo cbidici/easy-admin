@@ -1,8 +1,8 @@
 package com.cb.admin.builder;
 
 import java.lang.reflect.Type;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import com.cb.admin.bo.AttributeBO;
@@ -14,7 +14,12 @@ public class EntityBOBuilder {
 	
 	public EntityBOBuilder() {
 		this.entity = new EntityBO();
-		this.entity.setAttributes(new HashSet<>());
+		this.entity.setAttributes(new ArrayList<>());
+	}
+	
+	public EntityBOBuilder identifier(String identifier) {
+		this.entity.setIdentifier(identifier);
+		return this;
 	}
 	
 	public EntityBOBuilder type(Type type) {
@@ -37,7 +42,7 @@ public class EntityBOBuilder {
 		return this;
 	}
 	
-	public EntityBOBuilder attributes(Set<AttributeBO> attributes) {
+	public EntityBOBuilder attributes(List<AttributeBO> attributes) {
 		this.entity.setAttributes(attributes);
 		return this;
 	}

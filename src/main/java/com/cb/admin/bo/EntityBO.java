@@ -1,11 +1,13 @@
 package com.cb.admin.bo;
 
 import java.lang.reflect.Type;
-import java.util.Set;
+import java.util.List;
 
 public class EntityBO {
-
+	
 	private String key;
+	
+	private String identifier;
 	
 	private String name;
 	
@@ -15,7 +17,7 @@ public class EntityBO {
 	
 	private Class<?> cls;
 
-	private Set<AttributeBO> attributes;
+	private List<AttributeBO> attributes;
 
 	public String getKey() {
 		return key;
@@ -23,6 +25,14 @@ public class EntityBO {
 
 	public void setKey(String key) {
 		this.key = key;
+	}
+
+	public String getIdentifier() {
+		return identifier;
+	}
+
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
 	}
 
 	public String getName() {
@@ -57,11 +67,11 @@ public class EntityBO {
 		this.cls = cls;
 	}
 
-	public Set<AttributeBO> getAttributes() {
+	public List<AttributeBO> getAttributes() {
 		return attributes;
 	}
 
-	public void setAttributes(Set<AttributeBO> attributes) {
+	public void setAttributes(List<AttributeBO> attributes) {
 		this.attributes = attributes;
 	}
 

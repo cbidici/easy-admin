@@ -1,10 +1,17 @@
 package com.cb.admin.component;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
+import javax.persistence.Id;
 import javax.persistence.PersistenceContext;
 import javax.persistence.metamodel.Attribute;
 import javax.persistence.metamodel.EntityType;
@@ -14,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.cb.admin.bo.AttributeBO;
+import com.cb.admin.bo.EntityBO;
 import com.cb.admin.builder.AttributeBOBuilder;
 import com.cb.admin.builder.EntityBOBuilder;
 
@@ -28,36 +36,55 @@ public class InitializerComponent {
 
 	@PostConstruct
 	public void init() {
-		EntityBOBuilder builder = new EntityBOBuilder();
 
 		Set<EntityType<?>> listOfEntities = em.getMetamodel().getEntities();
 		for (EntityType<?> type : listOfEntities) {
-			Set<Attribute<?, ?>> attributes = getAttributes(type);
-			Set<AttributeBO> attributeBOs = new HashSet<>();
-			for (Attribute<?, ?> attribute : attributes) {
-				attributeBOs
-						.add(new AttributeBOBuilder().type(attribute.getJavaType()).identifier(attribute.getName()).name(attribute.getName()).build());
+			stateComponent.addEntity(getEntityBO(type));
+		}
+	}
+
+	private EntityBO getEntityBO(EntityType<?> type) {
+		EntityBOBuilder builder = new EntityBOBuilder();
+		EntityBO entityBO = builder.type(type.getJavaType()).name(type.getName())
+				.category(type.getJavaType().getPackage().getName()).cls(type.getJavaType()).build();
+		initAttributes(entityBO);
+		return entityBO;
+	}
+
+	private void initAttributes(EntityBO entityBO) {
+		List<AttributeBO> attributeBOs = new ArrayList<>();
+		List<Field> fields = getAttributes(entityBO.getCls());
+		for (Field field : fields) {
+			AttributeBO attrBO = new AttributeBOBuilder().type(field.getType()).field(field.getName())
+					.name(field.getName()).build();
+			if (isIdentifier(field)) {
+				attrBO.setIdentifier(true);
+				entityBO.setIdentifier(field.getName());
 			}
-
-			stateComponent.addEntity(builder.type(type.getJavaType()).name(type.getName())
-					.category(type.getJavaType().getPackage().getName()).attributes(attributeBOs)
-					.cls(type.getJavaType()).build());
+			attributeBOs.add(attrBO);
 		}
+		entityBO.setAttributes(attributeBOs);
 	}
 
-	private Set<Attribute<?, ?>> getAttributes(EntityType<?> type) {
-		HashSet<Attribute<?, ?>> attributes = new HashSet<Attribute<?, ?>>(type.getDeclaredAttributes());
-		if (type.getSupertype() != null) {
-			attributes.addAll(getAttributes(type.getSupertype()));
+	private boolean isIdentifier(Field field) {
+		boolean result = false;
+
+		Annotation[] annotations = field.getAnnotations();
+		for(Annotation annotation : annotations) {
+			if (Id.class.isInstance(annotation)) {
+				result = true;
+			}			
 		}
-		return attributes;
+
+		return result;
 	}
 
-	private Set<Attribute<?, ?>> getAttributes(IdentifiableType<?> type) {
-		HashSet<Attribute<?, ?>> attributes = new HashSet<Attribute<?, ?>>(type.getDeclaredAttributes());
-		if (type.getSupertype() != null) {
-			attributes.addAll(getAttributes(type.getSupertype()));
+	private List<Field> getAttributes(Class<?> cls) {
+		List<Field> attributes = new ArrayList<>();
+		if (cls.getSuperclass() != null) {
+			attributes.addAll(getAttributes(cls.getSuperclass()));
 		}
+		attributes.addAll(Arrays.asList(cls.getDeclaredFields()));
 		return attributes;
 	}
 }
