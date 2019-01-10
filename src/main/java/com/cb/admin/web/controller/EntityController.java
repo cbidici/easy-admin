@@ -32,7 +32,7 @@ public class EntityController {
 				.map(entityBO -> modelMapper.map(entityBO, EntityDTO.class)).collect(Collectors.toList());
 		return new ResponseEntity<List<?>>(resultList, HttpStatus.OK);
 	}
-
+	
 	@GetMapping("entities/{key}/attributes")
 	public ResponseEntity<?> entityAttributes(@PathVariable String key) {
 		List<AttributeDTO> resultList = entityService.getEntity(key).getAttributes().stream()
