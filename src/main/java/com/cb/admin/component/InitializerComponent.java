@@ -53,6 +53,7 @@ public class InitializerComponent {
 		for (Field field : fields) {
 			AttributeBO attrBO = new AttributeBOBuilder().type(field.getType()).field(field.getName())
 					.name(field.getName()).build();
+
 			if (isIdentifier(field)) {
 				attrBO.setIdentifier(true);
 				entityBO.setIdentifier(field.getName());
