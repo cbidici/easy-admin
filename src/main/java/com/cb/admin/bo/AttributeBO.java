@@ -5,9 +5,11 @@ import java.lang.reflect.Type;
 public class AttributeBO {
 
 	private String key;
-	
-	private String identifier;
-	
+
+	private boolean identifier;
+
+	private String field;
+
 	private String name;
 
 	private Type type;
@@ -20,12 +22,20 @@ public class AttributeBO {
 		this.key = key;
 	}
 
-	public String getIdentifier() {
+	public boolean isIdentifier() {
 		return identifier;
 	}
 
-	public void setIdentifier(String identifier) {
+	public void setIdentifier(boolean identifier) {
 		this.identifier = identifier;
+	}
+
+	public String getField() {
+		return field;
+	}
+
+	public void setField(String field) {
+		this.field = field;
 	}
 
 	public String getName() {
@@ -43,5 +53,4 @@ public class AttributeBO {
 	public void setType(Type type) {
 		this.type = type;
 	}
-
 }

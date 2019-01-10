@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cb.admin.web.dto.AttributeDTO;
 import com.cb.admin.web.dto.EntityDTO;
 import com.cb.admin.web.service.EntityService;
 
@@ -29,13 +30,15 @@ public class EntityController {
 	@GetMapping("entities")
 	public ResponseEntity<?> entities() {
 		List<EntityDTO> resultList = entityService.getEntities().values().stream()
-				.map(x -> modelMapper.map(x, EntityDTO.class)).collect(Collectors.toList());
+				.map(entityBO -> modelMapper.map(entityBO, EntityDTO.class)).collect(Collectors.toList());
 		return new ResponseEntity<List<?>>(resultList, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("entities/{key}/attributes")
 	public ResponseEntity<?> entityAttributes(@PathVariable String key) {
-		return new ResponseEntity<Set<?>>(entityService.getEntity(key).getAttributes(), HttpStatus.OK);
+		List<AttributeDTO> resultList = entityService.getEntity(key).getAttributes().stream()
+				.map(attrbiuteBO -> modelMapper.map(attrbiuteBO, AttributeDTO.class)).collect(Collectors.toList());
+		return new ResponseEntity<List<?>>(resultList, HttpStatus.OK);
 	}
 
 	@GetMapping("entities/{key}/data")

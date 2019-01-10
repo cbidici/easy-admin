@@ -13,8 +13,13 @@ public class AttributeBOBuilder {
 		this.attribute = new AttributeBO();
 	}
 	
-	public AttributeBOBuilder identifier(String identifier) {
+	public AttributeBOBuilder identifier(boolean identifier) {
 		this.attribute.setIdentifier(identifier);
+		return this;
+	}
+	
+	public AttributeBOBuilder field(String field) {
+		this.attribute.setField(field);
 		return this;
 	}
 	
