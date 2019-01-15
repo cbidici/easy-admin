@@ -39,7 +39,7 @@ public class EntityController {
 				.map(attrbiuteBO -> modelMapper.map(attrbiuteBO, AttributeDTO.class)).collect(Collectors.toList());
 		return new ResponseEntity<List<?>>(resultList, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("entities/{key}/data")
 	public ResponseEntity<?> getEntity(@PathVariable String key) {
 		return new ResponseEntity<List<?>>(entityService.queryEntities(key), HttpStatus.OK);
