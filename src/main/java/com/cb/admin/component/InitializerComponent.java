@@ -2,10 +2,8 @@ package com.cb.admin.component;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -13,9 +11,7 @@ import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.Id;
 import javax.persistence.PersistenceContext;
-import javax.persistence.metamodel.Attribute;
 import javax.persistence.metamodel.EntityType;
-import javax.persistence.metamodel.IdentifiableType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -57,6 +53,7 @@ public class InitializerComponent {
 		for (Field field : fields) {
 			AttributeBO attrBO = new AttributeBOBuilder().type(field.getType()).field(field.getName())
 					.name(field.getName()).build();
+
 			if (isIdentifier(field)) {
 				attrBO.setIdentifier(true);
 				entityBO.setIdentifier(field.getName());

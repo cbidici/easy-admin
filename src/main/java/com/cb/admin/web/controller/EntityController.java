@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +33,7 @@ public class EntityController {
 				.map(entityBO -> modelMapper.map(entityBO, EntityDTO.class)).collect(Collectors.toList());
 		return new ResponseEntity<List<?>>(resultList, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("entities/{key}/attributes")
 	public ResponseEntity<?> entityAttributes(@PathVariable String key) {
 		List<AttributeDTO> resultList = entityService.getEntity(key).getAttributes().stream()
@@ -45,4 +46,9 @@ public class EntityController {
 		return new ResponseEntity<List<?>>(entityService.queryEntities(key), HttpStatus.OK);
 	}
 
+	@DeleteMapping("entities/{key}/data/{identifiers}")
+	public ResponseEntity<Void> deleteEntityData(@PathVariable String key, @PathVariable List<String> identifiers) {
+		entityService.deleteEntities(key, identifiers);
+		return  new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+	}
 }

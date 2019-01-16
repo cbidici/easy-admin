@@ -4,7 +4,7 @@ import java.lang.reflect.Type;
 
 public class AttributeDTO {
 	private String key;
-  
+
 	private boolean identifier;
 
 	private String field;
@@ -52,5 +52,4 @@ public class AttributeDTO {
 	public void setType(Type type) {
 		this.type = type;
 	}
-
 }

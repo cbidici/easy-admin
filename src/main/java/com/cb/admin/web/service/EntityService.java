@@ -13,4 +13,6 @@ public interface EntityService {
 
 	EntityBO getEntity(String key);
 
+	void deleteEntities(String key, List<String> identifiers);
+
 }
