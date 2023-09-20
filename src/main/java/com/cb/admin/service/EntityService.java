@@ -34,30 +34,25 @@ public class EntityService {
 	
 	public List<?> queryEntities(String name) {
 		Entity entity = store.getEntity(name);
-		
 		EntityManager entityManager = emf.createEntityManager();
 		SessionImpl session = (SessionImpl)entityManager.getDelegate();
-		//Transaction tx = (Transaction) session.beginTransaction();
 		Query<?> query = session.createQuery("from "+entity.getName());
 		List<?> list = query.list();
 		session.close();
 		return list;
 	}
 
-	public void deleteEntities(String key, List<String> identifiers) {
+	public void deleteEntity(String key, String identifier) {
 		Entity entity = getEntity(key);
 		String identifierName = entity.getAttributes().stream().filter(Attribute::isIdentifier).findFirst().orElseThrow().getName();
-		
-		for(String identifier : identifiers) {
-			
-			EntityManager entityManager = emf.createEntityManager();
-			SessionImpl session = (SessionImpl)entityManager.getDelegate();
-			Transaction tx = session.beginTransaction();
-			Query<?> query = session.createQuery("from "+entity.getName()+" where " + identifierName + " = '" + identifier + "'");
-			Object obj = query.getSingleResult();
-			session.remove(obj);
-			tx.commit();
-			session.close();
-		}
+
+		EntityManager entityManager = emf.createEntityManager();
+		SessionImpl session = (SessionImpl)entityManager.getDelegate();
+		Transaction tx = session.beginTransaction();
+		Query<?> query = session.createQuery("from "+entity.getName()+" where " + identifierName + " = '" + identifier + "'");
+		Object obj = query.getSingleResult();
+		session.remove(obj);
+		tx.commit();
+		session.close();
 	}
 }

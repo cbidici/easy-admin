@@ -27,15 +27,15 @@
 ### JS ###
 
 # dependencies
-/node_modules
-/.pnp
+/src/main/js/node_modules
+/src/main/js/.pnp
 .pnp.js
 
 # testing
-/coverage
+/src/main/js/coverage
 
 # production
-/build
+/src/main/js/build
 
 # misc
 .DS_Store

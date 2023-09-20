@@ -35,9 +35,9 @@ public class EntityController {
 		return new ResponseEntity<>(entityService.queryEntities(name), HttpStatus.OK);
 	}
 
-	@DeleteMapping("entities/{key}/data/{identifiers}")
-	public ResponseEntity<Void> deleteEntityData(@PathVariable String key, @PathVariable List<String> identifiers) {
-		entityService.deleteEntities(key, identifiers);
+	@DeleteMapping("entities/{key}/data/{identifier}")
+	public ResponseEntity<Void> deleteEntityData(@PathVariable String key, @PathVariable String identifier) {
+		entityService.deleteEntity(key, identifier);
 		return  new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 }

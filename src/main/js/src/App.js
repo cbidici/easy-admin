@@ -1,29 +1,48 @@
 import logo from './logo.svg';
 import { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import './App.css';
 require('bootstrap');
 
 
 function Header({text}) {
   return (
-    <h3>{text}</h3>
+    <nav class="navbar bg-body-secondary">
+      <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1">{text}</span>
+      </div>
+    </nav>
   );
 }
 
 function SideBar({entities, selectEntity}) {
-  const entityList = entities.map(entity => <li><a href='JavaScript:;' onClick={() => selectEntity(entity.type)}>{entity.name}</a></li>);
+  const entityList = entities.map(entity => <li><a className="link-secondary" href='JavaScript:;' onClick={() => selectEntity(entity.type)}>{entity.name}</a></li>);
   return (
     <div>
-      <ul>
+      <ul className="ps-2">
         {entityList}
       </ul>
     </div>
   );
 }
 
-function Search({entity}) {
-  return <div>Search {entity.name}</div>
+function TableTop({entity}) {
+  return (
+    <div class="row">
+      <div class="col">
+        <div class="input-group mb-3">
+          //<input type="text" class="form-control" placeholder="Search..." aria-label="Search" aria-describedby="searchButton" />
+          <button class="btn btn-outline-secondary" type="button" id="searchButton"><i class="bi bi-search"></i></button>
+        </div>
+      </div>
+      <div class="col">
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <button type="button" class="btn btn-outline-secondary"><i class="bi bi-file-earmark-plus"></i> New</button>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function Table({entity}) {
@@ -39,7 +58,6 @@ function Table({entity}) {
       )}
     </tr>
   );
-
 
   useEffect(() => {
       fetch('/easy-admin/entities/' + entity.name + '/data')
@@ -67,7 +85,7 @@ function Table({entity}) {
 function Crud({entity}) {
    return (
      <div>
-       <Search entity={entity} />
+       <TableTop entity={entity} />
        <Table entity={entity} />
      </div>
    );
@@ -98,7 +116,7 @@ function App() {
 
   return (
     <div className="App container">
-      <div className="row">
+      <div className="row mb-3">
         <Header text="Easy Admin"/>
       </div>
       <div className="row">
