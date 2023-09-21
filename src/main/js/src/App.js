@@ -27,18 +27,20 @@ function SideBar({entities, selectEntity}) {
   );
 }
 
-function TableTop({entity}) {
+function TableTop({entity, onNew}) {
   return (
     <div class="row">
       <div class="col">
         <div class="input-group mb-3">
-          //<input type="text" class="form-control" placeholder="Search..." aria-label="Search" aria-describedby="searchButton" />
+          {/*
+          <input type="text" class="form-control" placeholder="Search..." aria-label="Search" aria-describedby="searchButton" />
           <button class="btn btn-outline-secondary" type="button" id="searchButton"><i class="bi bi-search"></i></button>
+           */}
         </div>
       </div>
       <div class="col">
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-          <button type="button" class="btn btn-outline-secondary"><i class="bi bi-file-earmark-plus"></i> New</button>
+          <button type="button" class="btn btn-outline-secondary" onClick={onNew}><i class="bi bi-file-earmark-plus"></i> New</button>
         </div>
       </div>
     </div>
@@ -82,18 +84,32 @@ function Table({entity}) {
   );
 }
 
-function Crud({entity}) {
+function Crud({entity, onNew}) {
    return (
      <div>
-       <TableTop entity={entity} />
+       <TableTop entity={entity} onNew={onNew} />
        <Table entity={entity} />
      </div>
    );
 }
 
+function Create({entity, onCancel}) {
+  return (
+    <div>
+      <div>Element Create Form for {entity.name}</div>
+      <a href='JavaScript:;'></a>
+    </div>
+   );
+}
+
 function Content({entity}) {
+  const [operation, setOperation] = useState('list');
   if (entity) {
-    return (<div><Crud entity={entity} /></div>);
+    if(operation == 'create') {
+      return (<Create entity={entity} onCancel={()=>setOperation('list')}/>);
+    } else {
+      return (<Crud entity={entity} onNew={()=>setOperation('create')} />);
+    }
   } else {
     return (<div>Select an entity to manage.</div>);
   }
