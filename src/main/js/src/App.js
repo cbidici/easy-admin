@@ -84,7 +84,7 @@ function Table({entity}) {
   );
 }
 
-function Crud({entity, onNew}) {
+function List({entity, onNew}) {
    return (
      <div>
        <TableTop entity={entity} onNew={onNew} />
@@ -93,22 +93,61 @@ function Crud({entity, onNew}) {
    );
 }
 
-function Create({entity, onCancel}) {
+function TextInput({attribute, data}) {
   return (
-    <div>
-      <div>Element Create Form for {entity.name}</div>
-      <a href='JavaScript:;'></a>
+    <div class="mb-3">
+      <label for={attribute.name}>{attribute.name}</label>
+      <input type="text" class="form-control" id={attribute.name} placeholder="" />
     </div>
+  );
+}
+
+function DateTimeInput({attribute, data}) {
+  return (
+    <div class="mb-3">
+      <label for={attribute.name}>{attribute.name}</label>
+      <div class="input-group">
+        <input type="date" class="form-control" />
+        <input type="time" class="form-control" />
+      </div>
+    </div>
+  );
+}
+
+function Create({entity, onCancel}) {
+  const inputs = entity.attributes
+    .filter(attribute => !attribute.identifier)
+    .map(attribute => {
+      switch(attribute.type) {
+        case 'java.lang.String':
+          return (<TextInput attribute={attribute} />);
+        case 'java.time.LocalDateTime':
+          return (<DateTimeInput attribute={attribute} />);
+        default:
+          return (<div>Unsupported type.</div>);
+      }
+    });
+
+  return (
+    <form>
+      <div class="mb-3">Element Create Form for {entity.name}</div>
+      {inputs}
+      <div class="d-grid gap-2 d-md-flex justify-content-md-end" role="group">
+        <div class="btn-group">
+          <button type="button" onClick={onCancel} class="btn btn-secondary">Cancel</button>
+          <button type="button" class="btn btn-outline-secondary">Create</button>
+        </div>
+      </div>
+    </form>
    );
 }
 
-function Content({entity}) {
-  const [operation, setOperation] = useState('list');
-  if (entity) {
-    if(operation == 'create') {
-      return (<Create entity={entity} onCancel={()=>setOperation('list')}/>);
+function Content({entityOperation, selectOperation}) {
+  if (entityOperation.entity) {
+    if(entityOperation.operation == 'create') {
+      return (<Create entity={entityOperation.entity} onCancel={()=>selectOperation('list')}/>);
     } else {
-      return (<Crud entity={entity} onNew={()=>setOperation('create')} />);
+      return (<List entity={entityOperation.entity} onNew={()=>selectOperation('create')} />);
     }
   } else {
     return (<div>Select an entity to manage.</div>);
@@ -117,10 +156,14 @@ function Content({entity}) {
 
 function App() {
   const [entities, setEntities] = useState([]);
-  const [selectedEntity, setSelectedEntity] = useState(null);
+  const [entityOperation, setEntityOperation] = useState({entity:null, operation:'list'});
 
   function selectEntity(typeName) {
-    setSelectedEntity(entities.find(e => e.type === typeName));
+    setEntityOperation({entity:entities.find(e => e.type === typeName), operation: 'list'});
+  }
+
+  function selectOperation(operation) {
+    setEntityOperation({...entityOperation, operation:operation});
   }
 
   useEffect(() => {
@@ -140,7 +183,7 @@ function App() {
           <SideBar entities={entities} selectEntity={selectEntity}/>
         </div>
         <div className="col-10">
-          <Content entity={selectedEntity}/>
+          <Content entityOperation={entityOperation} selectOperation={selectOperation}/>
         </div>
       </div>
     </div>
