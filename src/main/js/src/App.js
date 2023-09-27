@@ -93,36 +93,72 @@ function List({entity, onNew}) {
    );
 }
 
-function TextInput({attribute, data}) {
+function TextInput({attributeName, setData}) {
   return (
     <div class="mb-3">
-      <label for={attribute.name}>{attribute.name}</label>
-      <input type="text" class="form-control" id={attribute.name} placeholder="" />
+      <label for={attributeName}>{attributeName}</label>
+      <input type="text" class="form-control" id={attributeName} onChange={(e) => setData(e.target.value)} placeholder="" />
     </div>
   );
 }
 
-function DateTimeInput({attribute, data}) {
+function DateTimeInput({attributeName, setData}) {
+
+  const [dataDate, setDataDate] = useState();
+  const [dataTime, setDataTime] = useState();
+
+  function setDate(value) {
+    setDataDate(value);
+    if(dataTime && value) {
+      setData(value + "T" + dataTime);
+    }
+  }
+
+  function setTime(value) {
+    setDataTime(value);
+    if(dataDate && value) {
+      setData(dataDate + "T" + value);
+    }
+  }
+
   return (
     <div class="mb-3">
-      <label for={attribute.name}>{attribute.name}</label>
+      <label for={attributeName}>{attributeName}</label>
       <div class="input-group">
-        <input type="date" class="form-control" />
-        <input type="time" class="form-control" />
+        <input type="date" onChange={(e) => setDate(e.target.value)} class="form-control" />
+        <input type="time" onChange={(e) => setTime(e.target.value)} class="form-control" />
       </div>
     </div>
   );
 }
 
-function Create({entity, onCancel}) {
+function Create({entity, returnBack}) {
+  const [data, setData] = useState({});
+
+  function setDataWithName(name, value) {
+    setData({...data, [name]:value})
+  }
+
+  function create() {
+    const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        };
+        fetch('/easy-admin/entities/' + entity.name + '/data', requestOptions)
+            .then(json => returnBack())
+            .catch(error => console.error(error));
+
+  }
+
   const inputs = entity.attributes
     .filter(attribute => !attribute.identifier)
     .map(attribute => {
       switch(attribute.type) {
         case 'java.lang.String':
-          return (<TextInput attribute={attribute} />);
+          return (<TextInput attributeName={attribute.name} setData={(value) => setDataWithName(attribute.name, value)} />);
         case 'java.time.LocalDateTime':
-          return (<DateTimeInput attribute={attribute} />);
+          return (<DateTimeInput attributeName={attribute.name} setData={(value) => setDataWithName(attribute.name, value)} />);
         default:
           return (<div>Unsupported type.</div>);
       }
@@ -134,8 +170,8 @@ function Create({entity, onCancel}) {
       {inputs}
       <div class="d-grid gap-2 d-md-flex justify-content-md-end" role="group">
         <div class="btn-group">
-          <button type="button" onClick={onCancel} class="btn btn-secondary">Cancel</button>
-          <button type="button" class="btn btn-outline-secondary">Create</button>
+          <button type="button" onClick={returnBack} class="btn btn-secondary">Cancel</button>
+          <button type="button" onClick={(e) => create()} class="btn btn-outline-secondary">Create</button>
         </div>
       </div>
     </form>
@@ -145,7 +181,7 @@ function Create({entity, onCancel}) {
 function Content({entityOperation, selectOperation}) {
   if (entityOperation.entity) {
     if(entityOperation.operation == 'create') {
-      return (<Create entity={entityOperation.entity} onCancel={()=>selectOperation('list')}/>);
+      return (<Create entity={entityOperation.entity} returnBack={()=>selectOperation('list')}/>);
     } else {
       return (<List entity={entityOperation.entity} onNew={()=>selectOperation('create')} />);
     }

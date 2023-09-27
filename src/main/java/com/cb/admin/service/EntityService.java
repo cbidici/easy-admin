@@ -3,11 +3,13 @@ package com.cb.admin.service;
 import com.cb.admin.domain.Attribute;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.PersistenceUnit;
 import java.util.List;
 import java.util.Map;
 
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.internal.SessionImpl;
 import org.hibernate.query.Query;
@@ -39,7 +41,24 @@ public class EntityService {
 		Query<?> query = session.createQuery("from "+entity.getName());
 		List<?> list = query.list();
 		session.close();
+		entityManager.close();
 		return list;
+	}
+
+	public void saveEntity(Object object) {
+		EntityTransaction transaction = null;
+		EntityManager entityManager = null;
+		try{
+			entityManager = emf.createEntityManager();
+			transaction = entityManager.getTransaction();
+			transaction.begin();
+			entityManager.persist(object);
+			transaction.commit();
+		}catch(Exception e){
+			transaction.rollback();
+		}finally{
+			entityManager.close();
+		}
 	}
 
 	public void deleteEntity(String key, String identifier) {
@@ -54,5 +73,6 @@ public class EntityService {
 		session.remove(obj);
 		tx.commit();
 		session.close();
+		entityManager.close();
 	}
 }
